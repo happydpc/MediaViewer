@@ -1,0 +1,15 @@
+<!DOCTYPE RCC>
+<RCC>
+
+	<!-- QML files -->
+	<qresource prefix="/">
+		<file>Browser.qml</file>
+		<file>FolderBrowser.qml</file>
+		<file>MediaBrowser.qml</file>
+		<file>MediaViewer.qml</file>
+		<file>Main.qml</file>
+		<file>Viewer.qml</file>
+		<file>WindowSettings.qml</file>
+		<file>WindowState.qml</file>
+	</qresource>
+</RCC>
