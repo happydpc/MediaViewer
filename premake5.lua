@@ -8,12 +8,12 @@ local qt = premake.extensions.qt
 --
 -- Load user config
 --
-dofile( "Configuration.lua" )
+dofile( "config.lua" )
 
 --
 -- Load createinstall action
 --
-dofile( "Install.lua" )
+dofile( "install.lua" )
 
 --
 -- If no action, return
@@ -30,11 +30,11 @@ function configure()
 	-- Qt addon configuration
 	filter {}					qtprefix "Qt5"
 	filter ( "Debug")			qtsuffix "d"
-	filter ( "platforms:x86" )	qtpath ( QT_PATH.x86 )
+	filter ( "platforms:x32" )	qtpath ( QT_PATH.x32 )
 	filter ( "platforms:x64" )	qtpath ( QT_PATH.x64 )
 
 	-- debugging
-	filter ( "platforms:x86" )	debugenvs { "PATH=" .. QT_PATH.x86:gsub('/', '\\') .. "\\bin;%PATH%;" }
+	filter ( "platforms:x32" )	debugenvs { "PATH=" .. QT_PATH.x32:gsub('/', '\\') .. "\\bin;%PATH%;" }
 	filter ( "platforms:x64" )	debugenvs { "PATH=" .. QT_PATH.x64:gsub('/', '\\') .. "\\bin;%PATH%;" }
 	filter { }					debugdir "MediaViewer/Sources/QML"
 	-- filter { }					debugenvs { "QML_IMPORT_TRACE=1" }
@@ -89,7 +89,7 @@ end
 solution "MediaViewer"
 
 	configurations { "Debug", "Release", "Retail" }
-	platforms { "x86", "x64" }
+	platforms { "x32", "x64" }
 
 	location ( "Projects/" .. _ACTION )
 

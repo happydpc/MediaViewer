@@ -2,7 +2,7 @@
 --
 -- Project name (see createinstall action, in Install.lua)
 --
-PROJECT_NAME = "ImageViewer"
+PROJECT_NAME = "MediaViewer"
 
 
 --
@@ -10,7 +10,7 @@ PROJECT_NAME = "ImageViewer"
 --
 QT_PATH = {
 	-- Windows, x86
-	x86 = "D:/Development/Qt/5.6/msvc2015",
+	x32 = "D:/Development/Qt/5.6/msvc2015",
 	-- Windows, x64
 	x64 = "D:/Development/Qt/5.6/msvc2015_64",
 	-- OSX

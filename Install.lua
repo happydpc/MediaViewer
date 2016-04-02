@@ -13,6 +13,7 @@ newaction {
 		-- create the command, and normalize path for windows
 		local command = QT_PATH[_platform] .. "/bin/windeployqt.exe"
 		command = command .. " --no-translations"
+		command = command .. " --no-opengl-sw"
 		command = command .. (_configuration == "Debug" and " --debug" or " --release")
 		command = command .. " \"Output/bin/" .. _configuration .. "/" .. _platform .. "/" .. PROJECT_NAME .. ".exe\""
 		command = command .. " --verbose 3"
