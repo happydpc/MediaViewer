@@ -11,34 +11,13 @@ import QtQml.Models 2.2
 ScrollView {
 	id: scrollView
 
-	// alias
-	property alias folderPath: root.folderPath
-	property alias model: root.model
-
-	// the selection model (used to sync the browser and the viewer)
+	// externally set
 	property var selection
+	property var stateManager
 
 	// the grid view
 	GridView {
 		id: root
-
-		// the root folder
-		property string folderPath: ""
-		onFolderPathChanged: {
-			if (model) {
-				model.root = folderPath;
-				selection.selectByPath(folderPath);
-			}
-		}
-
-		// update on selection change
-		onCurrentItemChanged: {
-			if (currentItem) {
-				selection.selectByPath(currentItem.currentPath);
-			} else {
-				selection.selectByPath("");
-			}
-		}
 
 		// size of the cells
 		cellWidth: 220
@@ -50,6 +29,9 @@ ScrollView {
 		// delegates
 		delegate: itemDelegate
 		highlight: highlightDelegate
+
+		// bind the model
+		model: selection ? selection.model : undefined
 
 		// delegate used to draw an item
 		Component {
@@ -101,6 +83,15 @@ ScrollView {
 			}
 		}
 
+		// update on selection change
+		onCurrentItemChanged: {
+			if (currentItem) {
+				selection.selectByPath(currentItem.currentPath);
+			} else {
+				selection.selectByPath("");
+			}
+		}
+
 		// Mouse handling
 		MouseArea {
 			anchors.fill: parent
@@ -114,6 +105,11 @@ ScrollView {
 					mouse.x + root.contentX,
 					mouse.y + root.contentY
 				);
+			}
+			onDoubleClicked: {
+				if (selection.currentImage) {
+					stateManager.state = "fullscreen";
+				}
 			}
 		}
 	}
@@ -136,6 +132,10 @@ ScrollView {
 			case Qt.Key_Right:
 				event.accepted = true;
 				root.moveCurrentIndexRight();
+				break;
+			case Qt.Key_Enter:
+			case Qt.Key_Return:
+				stateManager.state = "fullscreen";
 				break;
 		}
 	}

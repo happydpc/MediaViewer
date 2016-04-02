@@ -23,6 +23,8 @@ namespace MediaViewerLib
 
 		// movies
 		{ "mp4",	MediaType::Movie },
+		{ "flv",	MediaType::Movie },
+		{ "webm",	MediaType::Movie },
 		{ "mov",	MediaType::Movie }
 	};
 

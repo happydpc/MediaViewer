@@ -29,7 +29,7 @@ namespace MediaViewerLib
 
 		Q_OBJECT
 
-		Q_ENUMS(Type)
+		Q_ENUMS(MediaType)
 		Q_PROPERTY(QString path READ GetPath)
 		Q_PROPERTY(QString name READ GetName)
 		Q_PROPERTY(MediaType type READ GetType)

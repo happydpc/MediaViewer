@@ -1,6 +1,9 @@
 import QtQuick 2.5
 import QtQuick.Window 2.2
+import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.0
 import QtQml.Models 2.2
+import Qt.labs.settings 1.0
 
 
 //
@@ -37,103 +40,68 @@ Window {
 	}
 
 	//
+	// default settings
+	//
+	Settings {
+		id: settings
+		property alias mediaViewerWidth: mediaViewer.width
+		property alias mediaViewerHeight: mediaViewer.height
+	}
+
+	//
 	// The models
 	//
-	FolderModel { id: __folderModel; rootPaths: drives }
-	MediaModel { id: __mediaModel }
-	MediaSelection { id: __mediaSelection; model: __mediaModel }
+	FolderModel { id: folderModel; rootPaths: drives }
+	MediaModel { id: mediaModel; root: folderBrowser.currentFolderPath }
+	MediaSelection { id: mediaSelection; model: mediaModel }
 
 	//
-	// 'Constructor'
+	// Stater manager
 	//
-	Component.onCompleted: {
-		console.log("reloaded");
-	}	
-
-	//
-	// Set fullscreen mode
-	//
-	property bool fullscreen: false
-	property var previousVisibility
-	function setFullscreen(value) {
-		// checks for state changes
-		if (value === fullscreen) {
-			return;
-		}
-
-		// update the state
-		fullscreen = value;
-
-		// configure the UI
-		if (fullscreen === true) {
-			loader.sourceComponent = viewerComponent;
-			previousVisibility = mainWindow.visibility;
-			mainWindow.visibility = Window.FullScreen;
-		} else {
-			loader.sourceComponent = browserComponent;
-			mainWindow.visibility = previousVisibility;
-		}
+	StateManager {
+		mediaViewer: mediaViewer
+		mediaBrowser: mediaBrowser
 	}
 
 	//
-	// The main content, which is a loader to be able to switch between browsing
-	// and fullscreen
+	// The split between the mediaViewer + folder view and the images
 	//
-	Loader {
-		id: loader
+	SplitView {
 		anchors.fill: parent
-		sourceComponent: browserComponent
-		focus: true
-	}
+		orientation: Qt.Horizontal
 
-	//
-	// Browser component
-	//
-	Component {
-		id: browserComponent
-		Browser {
-			id: browser
-			focus: true
+		//
+		// split between the folders and the image view
+		//
+		SplitView {
+			orientation: Qt.Vertical
 
-			// bind the models
-			folderModel: __folderModel
-			mediaModel: __mediaModel
-			mediaSelection: __mediaSelection
+			//
+			// folder view
+			//
+			FolderBrowser {
+				id: folderBrowser
+				Layout.fillHeight: true
+				model: folderModel
+			}
 
-			// Handles keys that were not used by the browser
-			Keys.onReturnPressed: {
-				event.accepted = true;
-				mainWindow.setFullscreen(true);
+			//
+			// Imageview of the image.
+			//
+			MediaViewer {
+				id: mediaViewer
+				color: Qt.rgba(0, 0, 0, 1);
+				selection: mediaSelection
 			}
 		}
-	}
 
-	//
-	// Viewer component
-	//
-	Component {
-		id: viewerComponent
-		Viewer {
-			id: viewer
-			focus: true
-
-			// bind
-			model: __mediaModel
-			selection: __mediaSelection
-
-			// Handles keys that were not used by the viewer
-			Keys.onPressed: {
-				switch (event.key) {
-					case Qt.Key_Escape:
-						event.accepted = true;
-						mainWindow.setFullscreen(false);
-						break;
-				}
-			}
-			Keys.onReturnPressed: {
-				event.accepted = true;
-				mainWindow.setFullscreen(false);
-			}
+		//
+		// The image browser
+		//
+		MediaBrowser {
+			id: mediaBrowser
+			Layout.fillWidth: true
+			selection: mediaSelection
 		}
 	}
 }

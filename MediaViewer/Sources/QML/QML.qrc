@@ -3,13 +3,14 @@
 
 	<!-- QML files -->
 	<qresource prefix="/">
-		<file>Browser.qml</file>
 		<file>FolderBrowser.qml</file>
-		<file>MediaBrowser.qml</file>
-		<file>MediaViewer.qml</file>
 		<file>Main.qml</file>
-		<file>Viewer.qml</file>
+		<file>MediaBrowser.qml</file>
+		<file>MediaSelection.qml</file>
+		<file>MediaViewer.qml</file>
+		<file>StateManager.qml</file>
 		<file>WindowSettings.qml</file>
 		<file>WindowState.qml</file>
 	</qresource>
+
 </RCC>

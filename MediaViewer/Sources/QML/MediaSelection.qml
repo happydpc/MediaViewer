@@ -7,34 +7,33 @@ import QtQml.Models 2.2
 //
 ItemSelectionModel {
 
-	// the currently selected image
-	property var currentImage
-
-	// the path of the currently selected image
+	// the current media
+	property var currentImage: null
 	property var currentImagePath: "qrc:///images/empty"
+	property var currentImageIndex: -1
 
-	// set the current image by path
+	// set the current media by path
 	function selectByPath(path) {
 		if (model) {
-			var index = model.getIndexByPath(path);
+			var index = model.getModelIndexByPath(path);
 			setCurrentIndex(index, ItemSelectionModel.Current);
 		}
 	}
 
-	// select the previous image
+	// select the previous media
 	function selectPrevious() {
 		if (model) {
-			var index = model.getPreviousIndex(currentIndex);
+			var index = model.getPreviousModelIndex(currentIndex);
 			if (index.valid) {
 				setCurrentIndex(index, ItemSelectionModel.Current);
 			}
 		}
 	}
 
-	// select the next image
+	// select the next media
 	function selectNext() {
 		if (model) {
-			var index = model.getNextIndex(currentIndex);
+			var index = model.getNextModelIndex(currentIndex);
 			if (index.valid) {
 				setCurrentIndex(index, ItemSelectionModel.Current);
 			}
@@ -43,12 +42,16 @@ ItemSelectionModel {
 
 	// detect changes
 	onCurrentChanged: {
-		if (current.valid) {
-			currentImage = model.getImage(current);
-			currentImagePath = "file:///" + currentImage.path;
-		} else {
-			currentImage = null;
-			currentImagePath = "qrc:///images/empty";
+		if (model) {
+			if (current.valid) {
+				currentImage = model.getMedia(current);
+				currentImagePath = "file:///" + currentImage.path;
+				currentImageIndex = model.getIndex(current);
+			} else {
+				currentImage = null;
+				currentImagePath = "qrc:///images/empty";
+				currentImageIndex = -1;
+			}
 		}
 	}
 }

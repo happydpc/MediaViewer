@@ -48,13 +48,15 @@ namespace MediaViewerLib
 		// public API
 		const QString &				GetRoot(void) const;
 		void						SetRoot(const QString & path);
-		const QVector< Media * > &	GetImages(void) const;
+		const QVector< Media * > &	GetMedias(void) const;
 
 		// public QML API
-		Q_INVOKABLE QModelIndex		getIndexByPath(const QString & path) const;
-		Q_INVOKABLE QModelIndex		getPreviousIndex(const QModelIndex & index) const;
-		Q_INVOKABLE QModelIndex		getNextIndex(const QModelIndex & index) const;
-		Q_INVOKABLE Media *			getImage(const QModelIndex & index) const;
+		Q_INVOKABLE int				getIndexByPath(const QString & path) const;
+		Q_INVOKABLE QModelIndex		getModelIndexByPath(const QString & path) const;
+		Q_INVOKABLE QModelIndex		getPreviousModelIndex(const QModelIndex & index) const;
+		Q_INVOKABLE QModelIndex		getNextModelIndex(const QModelIndex & index) const;
+		Q_INVOKABLE Media *			getMedia(const QModelIndex & index) const;
+		Q_INVOKABLE int				getIndex(const QModelIndex & index) const;
 
 	private:
 
@@ -66,8 +68,8 @@ namespace MediaViewerLib
 		//! Dirty flag
 		mutable bool m_Dirty;
 
-		//! The images in the root folder
-		mutable QVector< Media * > m_Images;
+		//! The media in the root folder
+		mutable QVector< Media * > m_Medias;
 
 	};
 

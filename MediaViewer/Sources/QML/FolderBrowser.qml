@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.2
 import QtQml.Models 2.2
+import Qt.labs.settings 1.0
 
 
 
@@ -14,7 +15,9 @@ TreeView {
 	// The currently selected path
 	property string currentFolderPath: ""
 
+	//
 	// set the currently selected item from its path
+	//
 	function setCurrentFolderPath(path) {
 		// get the index from the path
 		var index = model.getIndexByPath(path);
@@ -32,6 +35,25 @@ TreeView {
 		}
 	}
 
+	//
+	// default settings
+	//
+	Settings {
+		id: settings
+		property string currentFolderPath: ""
+	}
+
+	//
+	// Initialization
+	//
+	Component.onCompleted: {
+		setCurrentFolderPath(settings.currentFolderPath);
+	}
+
+	//
+	// Bindings
+	//
+	onCurrentFolderPathChanged: settings.currentFolderPath = currentFolderPath
 
 	//-------------------------------------------------------------------------
 	// Privates

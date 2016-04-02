@@ -59,17 +59,17 @@ namespace MediaViewerLib
 	//!
 	void MediaModel::Clear(void)
 	{
-		for (Media * image : m_Images)
+		for (Media * image : m_Medias)
 		{
 			DELETE image;
 		}
-		m_Images.clear();
+		m_Medias.clear();
 	}
 
 	//!
 	//! Get the images in the root folder
 	//!
-	const QVector< Media * > &	MediaModel::GetImages(void) const
+	const QVector< Media * > &	MediaModel::GetMedias(void) const
 	{
 		if (m_Dirty == true)
 		{
@@ -78,63 +78,81 @@ namespace MediaViewerLib
 			{
 				if (IsMedia(file) == true)
 				{
-					m_Images.push_back(NEW Media(dir.absoluteFilePath(file)));
+					m_Medias.push_back(NEW Media(dir.absoluteFilePath(file)));
+					QQmlEngine::setObjectOwnership(m_Medias.back(), QQmlEngine::CppOwnership);
 				}
 			}
 
 			// reset the dirty flag
 			m_Dirty = false;
 		}
-		return m_Images;
+		return m_Medias;
 	}
 
 	//!
 	//! Get the index from a path
 	//!
-	QModelIndex MediaModel::getIndexByPath(const QString & path) const
+	int MediaModel::getIndexByPath(const QString & path) const
 	{
 		int index = 0;
-		for (const Media * image : m_Images)
+		for (const Media * image : m_Medias)
 		{
 			if (image->GetPath() == path)
 			{
-				return this->createIndex(index, 0, const_cast< Media * >(image));
+				return index;
 			}
 			++index;
 		}
-		return QModelIndex();
+		return -1;
 	}
 
 	//!
-	//! Get the previous index
+	//! Get the model index from a path
 	//!
-	QModelIndex MediaModel::getPreviousIndex(const QModelIndex & index) const
+	QModelIndex MediaModel::getModelIndexByPath(const QString & path) const
+	{
+		int index = this->getIndexByPath(path);
+		return index != -1 ? this->createIndex(index, 0, const_cast< Media * >(m_Medias[index])) : QModelIndex();
+	}
+
+	//!
+	//! Get the model previous index
+	//!
+	QModelIndex MediaModel::getPreviousModelIndex(const QModelIndex & index) const
 	{
 		if (index.isValid() == false || index.row() <= 1)
 		{
 			return QModelIndex();
 		}
-		return this->createIndex(index.row() - 1, 0, m_Images.at(index.row() - 1));
+		return this->createIndex(index.row() - 1, 0, m_Medias.at(index.row() - 1));
 	}
 
 	//!
-	//! Get the next index
+	//! Get the next model index
 	//!
-	QModelIndex MediaModel::getNextIndex(const QModelIndex & index) const
+	QModelIndex MediaModel::getNextModelIndex(const QModelIndex & index) const
 	{
-		if (index.isValid() == false || index.row() >= m_Images.size() - 1)
+		if (index.isValid() == false || index.row() >= m_Medias.size() - 1)
 		{
 			return QModelIndex();
 		}
-		return this->createIndex(index.row() + 1, 0, m_Images.at(index.row() + 1));
+		return this->createIndex(index.row() + 1, 0, m_Medias.at(index.row() + 1));
 	}
 
 	//!
-	//! Get an image
+	//! Get a media
 	//!
-	Media * MediaModel::getImage(const QModelIndex & index) const
+	Media * MediaModel::getMedia(const QModelIndex & index) const
 	{
 		return index.isValid() == true ? static_cast< Media * >(index.internalPointer()) : nullptr;
+	}
+
+	//!
+	//! Get the index of a media
+	//!
+	int MediaModel::getIndex(const QModelIndex & index) const
+	{
+		return index.isValid() == true ? index.row() : -1;
 	}
 
 	//!
@@ -179,7 +197,7 @@ namespace MediaViewerLib
 	{
 		Q_UNUSED(parent);
 		Q_ASSERT(parent.isValid() == false);
-		return this->createIndex(row, column, this->GetImages().at(row));
+		return this->createIndex(row, column, this->GetMedias().at(row));
 	}
 
 	//!
@@ -195,7 +213,7 @@ namespace MediaViewerLib
 	//!
 	int MediaModel::rowCount(const QModelIndex & parent) const
 	{
-		return parent.isValid() == true ? 0 : this->GetImages().size();
+		return parent.isValid() == true ? 0 : this->GetMedias().size();
 	}
 
 	//!
