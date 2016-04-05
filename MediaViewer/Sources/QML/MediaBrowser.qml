@@ -83,13 +83,21 @@ ScrollView {
 			}
 		}
 
-		// update on selection change
+		//
+		// synchronise the grid view's selection to our selection model
+		//
 		onCurrentItemChanged: {
 			if (currentItem) {
 				selection.selectByPath(currentItem.currentPath);
 			} else {
 				selection.selectByPath("");
 			}
+		}
+		Binding {
+			target: root
+			property: "currentIndex"
+			value: selection.currentImageIndex
+			when: selection && stateManager.state == "fullscreen"
 		}
 
 		// Mouse handling
