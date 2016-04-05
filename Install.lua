@@ -15,6 +15,7 @@ newaction {
 		command = command .. " --no-translations"
 		command = command .. " --no-opengl-sw"
 		command = command .. (_configuration == "Debug" and " --debug" or " --release")
+		command = command .. " --qmldir \"Output/bin/" .. _configuration .. "/" .. _platform .. "/\""
 		command = command .. " \"Output/bin/" .. _configuration .. "/" .. _platform .. "/" .. PROJECT_NAME .. ".exe\""
 		command = command .. " --verbose 3"
 		command = string.gsub(command, "/", "\\")

@@ -28,6 +28,12 @@ project "MediaViewer"
 	pchsource "Sources/MediaViewerPCH.cpp"
 	pchheader "MediaViewerPCH.h"
 
+	-- copy the import qml file to the output directory
+	filter "files:**/imports.qml"
+		buildmessage "Deploying %{file.name}"
+		buildcommands { "copy \"%{file.relpath:gsub('/', '\\')}\" \"%{cfg.buildtarget.directory:gsub('/', '\\')}\\%{file.name}\"" }
+		buildoutputs { "%{cfg.buildtarget.directory:gsub('/', '\\')}\\%{file.name}" }
+
 	--
 	-- uncomment to enable verbose QML import logs
 	--
