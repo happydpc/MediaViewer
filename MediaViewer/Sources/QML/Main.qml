@@ -4,11 +4,6 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 import QtQml.Models 2.2
 import Qt.labs.settings 1.0
-
-
-//
-// ImageBrowserer library
-//
 import MediaViewerLib 0.1
 
 
@@ -54,6 +49,7 @@ Window {
 	FolderModel { id: folderModel; rootPaths: drives }
 	MediaModel { id: mediaModel; root: folderBrowser.currentFolderPath }
 	MediaSelection { id: mediaSelection; model: mediaModel }
+	Connections { target: folderBrowser; onCurrentFolderPathChanged: mediaSelection.clear() }
 
 	//
 	// Stater manager

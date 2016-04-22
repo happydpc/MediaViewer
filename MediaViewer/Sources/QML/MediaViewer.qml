@@ -22,12 +22,16 @@ Rectangle {
 		State {
 			name: "fullscreen"
 			ParentChange { target: image; parent: fullScreenItem }
+			ParentChange { target: movie; parent: fullScreenItem }
 			PropertyChanges { target: image; focus: true }
+			PropertyChanges { target: movie; focus: true }
 		},
 		State {
 			name: "preview"
 			ParentChange { target: image; parent: root }
+			ParentChange { target: movie; parent: root }
 			PropertyChanges { target: image; focus: false }
+			PropertyChanges { target: movie; focus: false }
 		}
 	]
 
@@ -64,71 +68,22 @@ Rectangle {
 	}
 
 	//
-	// The movie
+	// The image viewer
 	//
-
-	//
-	// The image (animated or static)
-	//
-	AnimatedImage {
+	ImageViewer {
 		id: image
 		anchors.fill: parent
+		selection: root.selection
+		stateManager: root.stateManager
+	}
 
-		onActiveFocusChanged: if (activeFocus == false) { stateManager.state = "preview"; }
-		onStatusChanged: playing = (status == AnimatedImage.Ready)
-
-		// bind the source
-		source: selection ? selection.currentImagePath : "qrc:///images/empty"
-
-		// only fit when the image is greater than the view size
-		fillMode: sourceSize.width > width || sourceSize.height > height ? Image.PreserveAspectFit : Image.Pad
-
-		// configure the image
-		asynchronous: true
-		antialiasing: true
-		autoTransform: true
-		smooth: true
-		mipmap: true
-
-		//
-		// Mouse area to catch double clicks
-		//
-		MouseArea {
-			anchors.fill: parent
-			acceptedButtons: Qt.LeftButton
-			onDoubleClicked: {
-				if (stateManager.state == "fullscreen") {
-					stateManager.state = "preview";
-				} else {
-					stateManager.state = "fullscreen";
-				}
-			}
-		}
-
-		//
-		// keyboard handling
-		//
-		Keys.onPressed: {
-			if (activeFocus == false) {
-				return;
-			}
-			switch (event.key) {
-				case Qt.Key_Left:
-				case Qt.Key_Up:
-					event.accepted = true;
-					selection.selectPrevious();
-					break;
-				case Qt.Key_Right:
-				case Qt.Key_Down:
-					event.accepted = true;
-					selection.selectNext();
-					break;
-				case Qt.Key_Return:
-				case Qt.Key_Enter:
-				case Qt.Key_Escape:
-					stateManager.state = "preview";
-					break;
-			}
-		}
+	//
+	// The movie viewer
+	//
+	MovieViewer {
+		id: movie
+		anchors.fill: parent
+		selection: root.selection
+		stateManager: root.stateManager
 	}
 }

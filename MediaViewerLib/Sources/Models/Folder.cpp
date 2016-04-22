@@ -1,7 +1,7 @@
 #include "MediaViewerLibPCH.h"
 #include "FolderModel.h"
 #include "Folder.h"
-#include "MediaType.h"
+#include "Media.h"
 #include "Utils/Job.h"
 
 
@@ -148,7 +148,7 @@ namespace MediaViewerLib
 			{
 				for (const auto & child : dir.entryInfoList(QDir::Files, QDir::NoSort))
 				{
-					if (IsMedia(child.fileName()))
+					if (Media::IsMedia(child.fileName()))
 					{
 						++m_ImageCount;
 					}

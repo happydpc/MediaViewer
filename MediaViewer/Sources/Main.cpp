@@ -114,10 +114,12 @@ int main(int argc, char *argv[])
 		// install a file system watcher to be able to hot-reload the QML when it changes
 		QFileSystemWatcher watcher;
 		watcher.addPath("FolderBrowser.qml");
+		watcher.addPath("ImageViewer.qml");
 		watcher.addPath("Main.qml");
 		watcher.addPath("MediaBrowser.qml");
 		watcher.addPath("MediaSelection.qml");
 		watcher.addPath("MediaViewer.qml");
+		watcher.addPath("MovieViewer.qml");
 		watcher.addPath("StateManager.qml");
 		watcher.addPath("WindowSettings.qml");
 		watcher.addPath("WindowState.qml");

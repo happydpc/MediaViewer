@@ -7,12 +7,33 @@ namespace MediaViewerLib
 {
 
 	//!
+	//! Private list of supported media extension, and their associated MediaType
+	//!
+	const static QHash< QString, Media::Type > SupportedMediaExtensions = {
+		// static images
+		{ "jpg",	Media::Type::Image },
+		{ "jpeg",	Media::Type::Image },
+		{ "tif",	Media::Type::Image },
+		{ "tiff",	Media::Type::Image },
+		{ "png",	Media::Type::Image },
+		{ "dds",	Media::Type::Image },
+		{ "svg",	Media::Type::Image },
+
+		// animated images
+		{ "gif",	Media::Type::AnimatedImage },
+
+		// movies
+		{ "wmv",	Media::Type::Movie },
+		{ "avi",	Media::Type::Movie }
+	};
+
+	//!
 	//! Constructor.
 	//!
 	Media::Media(const QString & path)
 		: m_Path(path)
 		, m_Name(QFileInfo(path).fileName())
-		, m_Type(GetMediaType(path))
+		, m_Type(GetType(path))
 	{
 	}
 
@@ -52,9 +73,27 @@ namespace MediaViewerLib
 	//!
 	//! Get the media's type
 	//!
-	MediaType Media::GetType(void) const
+	Media::Type Media::GetType(void) const
 	{
 		return m_Type;
+	}
+
+	//!
+	//! Checks if a file is a supported media
+	//!
+	bool Media::IsMedia(const QString & filename)
+	{
+		return GetType(filename) != Type::NotSupported;
+	}
+
+	//!
+	//! Get the type of a file
+	//!
+	Media::Type Media::GetType(const QString & filename)
+	{
+		QString extension = filename.section('.', -1, -1).toLower();
+		auto type = SupportedMediaExtensions.find(extension);
+		return type != SupportedMediaExtensions.end() ? type.value() : Type::NotSupported;
 	}
 
 } // namespace MediaViewerLib

@@ -76,7 +76,7 @@ namespace MediaViewerLib
 			QDir dir(m_Root);
 			for (const auto & file : dir.entryList(QDir::Files, QDir::Name))
 			{
-				if (IsMedia(file) == true)
+				if (Media::IsMedia(file) == true)
 				{
 					m_Medias.push_back(NEW Media(dir.absoluteFilePath(file)));
 					QQmlEngine::setObjectOwnership(m_Medias.back(), QQmlEngine::CppOwnership);

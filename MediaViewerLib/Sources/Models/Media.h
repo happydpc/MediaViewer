@@ -2,9 +2,6 @@
 #define __MEDIA_H__
 
 
-#include "MediaType.h"
-
-
 namespace MediaViewerLib
 {
 	class Media;
@@ -29,10 +26,36 @@ namespace MediaViewerLib
 
 		Q_OBJECT
 
-		Q_ENUMS(MediaType)
-		Q_PROPERTY(QString path READ GetPath)
-		Q_PROPERTY(QString name READ GetName)
-		Q_PROPERTY(MediaType type READ GetType)
+		Q_ENUMS(Type)
+		Q_PROPERTY(QString path READ GetPath NOTIFY pathChanged)
+		Q_PROPERTY(QString name READ GetName NOTIFY nameChanged)
+		Q_PROPERTY(Type type READ GetType NOTIFY typeChanged)
+
+	public:
+
+		//!
+		//! The different type of media
+		//!
+		enum class Type
+		{
+			//! A simple static image
+			Image = 0,
+
+			//! An animated image
+			AnimatedImage,
+
+			//! A movie
+			Movie,
+
+			//! Not a media
+			NotSupported,
+		};
+
+	signals:
+
+		void	pathChanged(const QString & path);
+		void	nameChanged(const QString & name);
+		void	typeChanged(Type type);
 
 	public:
 
@@ -43,7 +66,11 @@ namespace MediaViewerLib
 		// public API
 		const QString &		GetPath(void) const;
 		const QString &		GetName(void) const;
-		MediaType			GetType(void) const;
+		Type				GetType(void) const;
+
+		// utilities
+		static bool		IsMedia(const QString & filename);
+		static Type		GetType(const QString & filename);
 
 	private:
 
@@ -54,7 +81,7 @@ namespace MediaViewerLib
 		QString m_Name;
 
 		//! The media type
-		MediaType m_Type;
+		Type m_Type;
 
 	};
 

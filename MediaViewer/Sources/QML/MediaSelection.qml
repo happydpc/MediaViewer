@@ -1,5 +1,6 @@
 import QtQuick 2.5
 import QtQml.Models 2.2
+import MediaViewerLib 0.1
 
 
 //
@@ -10,6 +11,7 @@ ItemSelectionModel {
 	// the current media
 	property var currentImage: null
 	property var currentImagePath: "qrc:///images/empty"
+	property var currentImageType: Media.NotSupported
 	property var currentImageIndex: -1
 
 	// set the current media by path
@@ -47,10 +49,12 @@ ItemSelectionModel {
 				currentImage = model.getMedia(current);
 				currentImagePath = "file:///" + currentImage.path;
 				currentImageIndex = model.getIndex(current);
+				currentImageType = currentImage.type;
 			} else {
 				currentImage = null;
 				currentImagePath = "qrc:///images/empty";
 				currentImageIndex = -1;
+				currentImageType = Media.NotSupported;
 			}
 		}
 	}

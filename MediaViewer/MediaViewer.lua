@@ -34,9 +34,6 @@ project "MediaViewer"
 		buildcommands { "copy \"%{file.relpath:gsub('/', '\\')}\" \"%{cfg.buildtarget.directory:gsub('/', '\\')}\\%{file.name}\"" }
 		buildoutputs { "%{cfg.buildtarget.directory:gsub('/', '\\')}\\%{file.name}" }
 
-	-- in debug, we don't compile the QML in the Qt resource file
-	filter ( "configurations:Debug" )		excludes { "**.qrc" }
-
 	--
 	-- uncomment to enable verbose QML import logs
 	--

@@ -97,7 +97,7 @@ ScrollView {
 			target: root
 			property: "currentIndex"
 			value: selection.currentImageIndex
-			when: selection && stateManager.state == "fullscreen"
+			when: selection
 		}
 
 		// Mouse handling
